@@ -1,102 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="8dp"
-    tools:viewBindingIgnore="true"
-    tools:context=".ui.fragments.CrashLogsFragment"
-   >
+    android:layout_margin="8dp">
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
+    <androidx.cardview.widget.CardView xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="8dp"
         app:cardBackgroundColor="#1E1E1E"
         app:cardCornerRadius="12dp"
         app:cardElevation="0dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHeight_percent="0.7"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        tools:context=".ui.fragments.CrashLogsFragment"
+        tools:viewBindingIgnore="true">
+
 
         <TextView
             android:id="@+id/trace"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
+            android:layout_margin="16dp"
             android:ellipsize="end"
             android:fontFamily="sans-serif-medium"
             android:textColor="@color/design_default_color_error"
             android:textSize="14sp"
             android:textStyle="bold" />
 
+
     </androidx.cardview.widget.CardView>
-
-
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_margin="32dp"
-        android:fontFamily="sans-serif-black"
-        android:text="Share as"
-        android:textColor="?colorOnPrimarySurface"
-        android:textSize="32sp"
-        app:layout_constraintBottom_toTopOf="@id/materialButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardView"
-        app:layout_constraintVertical_chainStyle="packed" />
-
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/materialButton2"
-        style="?materialButtonStyle"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:padding="16dp"
-        android:text="Image"
-        android:textSize="18sp"
-        app:backgroundTint="@color/black_200"
-        app:cornerRadius="12dp"
-        app:layout_constraintBottom_toBottomOf="@+id/materialButton"
-        app:layout_constraintEnd_toStartOf="@+id/materialButton"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/materialButton" />
-
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/materialButton"
-        style="?materialButtonOutlinedStyle"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:padding="16dp"
-        android:text="Text"
-        android:textColor="?colorOnPrimarySurface"
-        android:textSize="18sp"
-        app:cornerRadius="12dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHeight_percent="0.11"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/materialButton2"
-        app:layout_constraintTop_toBottomOf="@+id/textView"
-        app:strokeColor="@color/white"
-        app:strokeWidth="1dp" />
-
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>

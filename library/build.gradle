@@ -26,6 +26,9 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
 }
 
 dependencies {
@@ -36,5 +39,6 @@ dependencies {
     implementation 'com.google.android.material:material:1.2.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.1'
+    implementation 'com.google.code.gson:gson:2.8.6'
     testImplementation 'junit:junit:4.13'
 }

@@ -8,7 +8,6 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.thelumierguy.crashwatcher.CrashWatcher
 import com.thelumierguy.crashwatcher.data.CrashLogsData
 import com.thelumierguy.crashwatcher.data.DisplayItem
-import com.thelumierguy.crashwatcher.data.ScreenHistoryData
 import com.thelumierguy.crashwatcher.ui.fragments.CrashLogsFragment
 import com.thelumierguy.crashwatcher.ui.fragments.ScreenHistoryFragment
 
@@ -32,15 +31,12 @@ class CrashWatcherPagerAdapter(
                         )
                     }
                 }
-                is ScreenHistoryData -> {
+                else -> {
                     ScreenHistoryFragment().apply {
                         arguments = bundleOf(
                             Pair(CrashWatcher.EXTRA_SCREEN_HISTORY, crashDataItems[position])
                         )
                     }
-                }
-                else -> {
-                    CrashLogsFragment()
                 }
             }
         }

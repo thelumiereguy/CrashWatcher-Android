@@ -7,7 +7,7 @@ import android.net.Uri
 
 class CrashContentProvider : ContentProvider() {
     override fun onCreate(): Boolean {
-        CrashWatcher.init(context)
+        CrashWatcher.initCrashWatcher(context)
         return false
     }
 

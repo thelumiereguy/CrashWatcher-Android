@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.os.Process.myPid
 import android.util.Log
 import androidx.annotation.RestrictTo
+import com.google.gson.Gson
 import com.thelumierguy.crashwatcher.data.ScreenData
 import com.thelumierguy.crashwatcher.data.ScreenHistoryData
 import com.thelumierguy.crashwatcher.data.TrackingList
@@ -16,15 +17,14 @@ import com.thelumierguy.crashwatcher.ui.CrashWatcherActivity
 import com.thelumierguy.crashwatcher.utils.toList
 import java.io.*
 import java.lang.ref.WeakReference
-import java.util.*
 import kotlin.system.exitProcess
 
 
 object CrashWatcher {
     private const val MAX_STACK_TRACE_SIZE = 131071
+    val gson by lazy { Gson() }
 
-    //    private const val TIME_TO_CONSIDER_FOREGROUND_MS = 500
-    private const val TIME_TO_CONSIDER_FOREGROUND_MS = 0
+    private const val TIME_TO_CONSIDER_FOREGROUND_MS = 1000
     private var lastActivityCreatedTimestamp = 0L
     private lateinit var lastActivityCreated: WeakReference<Activity>
     const val EXTRA_CRASH_LOG = "EXTRA_CRASH_LOG"
@@ -35,10 +35,10 @@ object CrashWatcher {
     private var application: Application? = null
 
     @RestrictTo(RestrictTo.Scope.LIBRARY)
-    fun init(context: Context?) {
+    fun initCrashWatcher(context: Context?) {
         try {
             context?.let {
-                val oldHandler = Thread.getDefaultUncaughtExceptionHandler()
+                val defaultExceptionHandler = Thread.getDefaultUncaughtExceptionHandler()
                 application = context.applicationContext as Application
 
                 Thread.setDefaultUncaughtExceptionHandler(object : Thread.UncaughtExceptionHandler {
@@ -48,15 +48,15 @@ object CrashWatcher {
                                 "CrashWatcher",
                                 "Your application class or your error activity have crashed, the custom activity will not be launched!"
                             );
-                            if (oldHandler != null) {
-                                oldHandler.uncaughtException(p0, p1)
+                            if (defaultExceptionHandler != null) {
+                                defaultExceptionHandler.uncaughtException(p0, p1)
                                 return
                             }
-                        } else if (Date().time - lastActivityCreatedTimestamp >= TIME_TO_CONSIDER_FOREGROUND_MS) {
+                        } else if (System.currentTimeMillis() - lastActivityCreatedTimestamp >= TIME_TO_CONSIDER_FOREGROUND_MS) {
                             startCrashReportActivity(p1)
                         } else {
-                            if (oldHandler != null) {
-                                oldHandler.uncaughtException(p0, p1)
+                            if (defaultExceptionHandler != null) {
+                                defaultExceptionHandler.uncaughtException(p0, p1)
                                 return
                             }
                         }
@@ -120,8 +120,8 @@ object CrashWatcher {
                         // explicitly kill it off.
                         lastActivityCreated =
                             WeakReference(activity)
-                        lastActivityCreatedTimestamp = Date().time
-                        val intentData = activity.intent.toList()
+                        lastActivityCreatedTimestamp = System.currentTimeMillis()
+                        val intentData = activity.intent.toList(gson)
                         screensList.add(
                             ScreenData(
                                 activity.localClassName,

@@ -1,26 +1,28 @@
 package com.thelumierguy.crashwatcher.ui.adapters
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.transition.ChangeBounds
-import androidx.transition.TransitionManager
 import com.thelumierguy.crashwatcher.data.ScreenData
 import com.thelumierguy.crashwatcher.data.ScreenDataState
 import com.thelumierguy.crashwatcher.data.ScreenHistoryData
 import com.thelumierguy.crashwatcher.databinding.LayoutScreenHistoryListItemBinding
 import com.thelumierguy.crashwatcher.utils.getFormattedDate
 
+
 class ScreenHistoryAdapter(private val screenHistoryData: ScreenHistoryData) :
 
     RecyclerView.Adapter<ScreenHistoryAdapter.ScreenHistoryViewHolder>() {
 
-    private val transition by lazy {
-        ChangeBounds().setDuration(500L)
-    }
+//    private val transition by lazy {
+//        TransitionSet().addTransition(
+//            ChangeBounds().setDuration(600L)
+//        ).addTransition(
+//            Fade().setDuration(200L)
+//        )
+//    }
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ScreenHistoryViewHolder {
@@ -30,23 +32,27 @@ class ScreenHistoryAdapter(private val screenHistoryData: ScreenHistoryData) :
     }
 
     override fun onBindViewHolder(holder: ScreenHistoryViewHolder, position: Int) {
+        val screen = screenHistoryData.screenList[position]
+        var screenDataState = screenHistoryData.screenDataStateList[position]
+        val shouldShowExtrasData = screen.intentKeys.isNullOrEmpty().not()
         holder.viewBinding.apply {
-            val screen = screenHistoryData.screenList[position]
             tvScreenName.text = screen.screenName
             tvOpenedAt.text = getFormattedDate(screen.lastOpenedTimeStamp)
-            var screenDataState = screenHistoryData.screenDataStateList[position]
-            if (!screen.intentKeys.isNullOrEmpty()) {
+            holder.viewBinding.ivToggle.isVisible = shouldShowExtrasData
+            if (shouldShowExtrasData) {
                 initScreenData(holder, screen)
-                holder.viewBinding.ivToggle.visibility = View.VISIBLE
                 updateScreenDataListState(screenDataState, holder)
                 holder.viewBinding.ivToggle.setOnClickListener {
                     screenDataState = screenDataState.toggle()
                     updateScreenDataListState(screenDataState, holder)
-                    rotateToggle(screenDataState, holder)
                     screenHistoryData.screenDataStateList[position] = screenDataState
+                    holder.viewBinding.clRoot.post {
+                        rotateToggle(screenDataState, holder)
+                    }
                 }
             }
         }
+
     }
 
     private fun initScreenData(
@@ -54,7 +60,6 @@ class ScreenHistoryAdapter(private val screenHistoryData: ScreenHistoryData) :
         screenData: ScreenData
     ) {
         holder.viewBinding.rvScreenData.apply {
-            recycledViewPool
             layoutManager = LinearLayoutManager(context)
             adapter = IntentDataAdapter(screenData.intentKeys, screenData.intentValues)
         }
@@ -64,18 +69,9 @@ class ScreenHistoryAdapter(private val screenHistoryData: ScreenHistoryData) :
         screenDataState: ScreenDataState,
         holder: ScreenHistoryViewHolder
     ) {
-        TransitionManager.beginDelayedTransition(
-            holder.viewBinding.root,
-            transition
-        )
-        if (screenDataState == ScreenDataState.COLLAPSED) {
-            holder.viewBinding.rvScreenData.visibility = View.GONE
-            holder.viewBinding.viewDivider.visibility = View.INVISIBLE
-        } else {
-            holder.viewBinding.rvScreenData.visibility = View.VISIBLE
-            holder.viewBinding.viewDivider.visibility = View.VISIBLE
-        }
+        holder.viewBinding.rvScreenData.isVisible = screenDataState == ScreenDataState.EXPANDED
     }
+
 
     private fun rotateToggle(screenDataState: ScreenDataState, holder: ScreenHistoryViewHolder) {
         holder.viewBinding.ivToggle.animate().rotation(screenDataState.degreesToRotate)
