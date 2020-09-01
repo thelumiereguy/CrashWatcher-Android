@@ -6,8 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
-    app:cardBackgroundColor="#1E1E1E"
-    app:cardCornerRadius="16dp">
+    app:cardBackgroundColor="?colorSecondary"
+    app:cardCornerRadius="12dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_root"
@@ -22,6 +22,7 @@
             android:layout_marginTop="16dp"
             android:fontFamily="sans-serif-medium"
             android:text="Screen Name : "
+            android:textColor="?colorOnSecondary"
             android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -34,6 +35,7 @@
             android:layout_marginEnd="8dp"
             android:fontFamily="sans-serif-thin"
             android:text="MainActivity"
+            android:textColor="?colorOnSecondary"
             android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="@+id/textView2"
             app:layout_constraintEnd_toStartOf="@+id/iv_toggle"
@@ -51,6 +53,7 @@
             android:layout_marginBottom="8dp"
             android:fontFamily="sans-serif-medium"
             android:text="Opened at :"
+            android:textColor="?colorOnSecondary"
             android:textSize="18sp"
             app:layout_constraintBottom_toTopOf="@id/rv_screen_data"
             app:layout_constraintStart_toStartOf="parent"
@@ -63,6 +66,7 @@
             android:layout_marginStart="24dp"
             android:fontFamily="sans-serif-thin"
             android:text="12:59:12"
+            android:textColor="?colorOnSecondary"
             android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="@+id/textView4"
             app:layout_constraintEnd_toEndOf="@+id/tv_screen_name"
@@ -70,7 +74,7 @@
             app:layout_constraintTop_toTopOf="@+id/textView4" />
 
 
-        <ImageView
+        <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/iv_toggle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

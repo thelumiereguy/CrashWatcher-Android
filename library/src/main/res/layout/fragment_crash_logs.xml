@@ -4,12 +4,12 @@
     android:layout_height="match_parent"
     android:layout_margin="8dp">
 
-    <androidx.cardview.widget.CardView xmlns:app="http://schemas.android.com/apk/res-auto"
+    <com.google.android.material.card.MaterialCardView xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="8dp"
-        app:cardBackgroundColor="#1E1E1E"
+        app:cardBackgroundColor="?colorSecondary"
         app:cardCornerRadius="12dp"
         app:cardElevation="0dp"
         tools:context=".ui.fragments.CrashLogsFragment"
@@ -18,8 +18,8 @@
 
         <TextView
             android:id="@+id/trace"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_margin="16dp"
             android:ellipsize="end"
             android:fontFamily="sans-serif-medium"
@@ -28,5 +28,5 @@
             android:textStyle="bold" />
 
 
-    </androidx.cardview.widget.CardView>
+    </com.google.android.material.card.MaterialCardView>
 </FrameLayout>

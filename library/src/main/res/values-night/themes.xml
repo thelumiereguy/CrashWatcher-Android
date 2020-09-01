@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Theme.CrashWatcher" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/white</item>
+        <item name="colorOnPrimary">@color/black_500</item>
+        <item name="android:colorBackground">@color/black_500</item>
+        <item name="colorSecondary">@color/black_200</item>
+        <item name="colorOnSecondary">@color/white_500</item>
+        <item name="colorControlHighlight">@color/white_100</item>
+    </style>
+
+</resources>

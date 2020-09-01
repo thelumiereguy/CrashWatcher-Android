@@ -19,6 +19,11 @@ data class ScreenData(
     val intentValues: List<String> = listOf()
 ) : Parcelable
 
+data class ShareData(
+    val stackTrace: String,
+    val screensList: List<ScreenData>
+)
+
 enum class ScreenDataState(val degreesToRotate: Float) {
     EXPANDED(180F),
     COLLAPSED(0F);

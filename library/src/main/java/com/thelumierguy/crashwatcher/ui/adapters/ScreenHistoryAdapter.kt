@@ -5,6 +5,10 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.transition.ChangeBounds
+import androidx.transition.Fade
+import androidx.transition.TransitionManager
+import androidx.transition.TransitionSet
 import com.thelumierguy.crashwatcher.data.ScreenData
 import com.thelumierguy.crashwatcher.data.ScreenDataState
 import com.thelumierguy.crashwatcher.data.ScreenHistoryData
@@ -16,13 +20,11 @@ class ScreenHistoryAdapter(private val screenHistoryData: ScreenHistoryData) :
 
     RecyclerView.Adapter<ScreenHistoryAdapter.ScreenHistoryViewHolder>() {
 
-//    private val transition by lazy {
-//        TransitionSet().addTransition(
-//            ChangeBounds().setDuration(600L)
-//        ).addTransition(
-//            Fade().setDuration(200L)
-//        )
-//    }
+    private val transition by lazy {
+        TransitionSet().addTransition(
+            ChangeBounds().setDuration(100L)
+        )
+    }
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ScreenHistoryViewHolder {
@@ -69,13 +71,14 @@ class ScreenHistoryAdapter(private val screenHistoryData: ScreenHistoryData) :
         screenDataState: ScreenDataState,
         holder: ScreenHistoryViewHolder
     ) {
+        TransitionManager.beginDelayedTransition(holder.viewBinding.root, transition)
         holder.viewBinding.rvScreenData.isVisible = screenDataState == ScreenDataState.EXPANDED
     }
 
 
     private fun rotateToggle(screenDataState: ScreenDataState, holder: ScreenHistoryViewHolder) {
         holder.viewBinding.ivToggle.animate().rotation(screenDataState.degreesToRotate)
-            .setDuration(500).start()
+            .setDuration(200).start()
     }
 
     override fun getItemCount(): Int {
