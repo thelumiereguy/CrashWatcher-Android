@@ -33,15 +33,14 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
             android:layout_marginEnd="8dp"
-            android:fontFamily="sans-serif-thin"
-            android:text="MainActivity"
             android:textColor="?colorOnSecondary"
             android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="@+id/textView2"
             app:layout_constraintEnd_toStartOf="@+id/iv_toggle"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@+id/textView2"
-            app:layout_constraintTop_toTopOf="@+id/textView2" />
+            app:layout_constraintTop_toTopOf="@+id/textView2"
+            tools:text="MainActivity" />
 
 
         <TextView
@@ -64,14 +63,13 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
-            android:fontFamily="sans-serif-thin"
-            android:text="12:59:12"
             android:textColor="?colorOnSecondary"
             android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="@+id/textView4"
             app:layout_constraintEnd_toEndOf="@+id/tv_screen_name"
             app:layout_constraintStart_toEndOf="@+id/textView2"
-            app:layout_constraintTop_toTopOf="@+id/textView4" />
+            app:layout_constraintTop_toTopOf="@+id/textView4"
+            tools:text="12:59:12" />
 
 
         <com.google.android.material.imageview.ShapeableImageView

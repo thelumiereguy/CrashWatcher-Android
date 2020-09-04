@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ShareCompat
 import com.google.android.material.tabs.TabLayoutMediator
-import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import com.thelumierguy.crashwatcher.EXTRA_ACTIVITY_HISTORY
 import com.thelumierguy.crashwatcher.EXTRA_CRASH_LOG
 import com.thelumierguy.crashwatcher.EXTRA_FRAGMENT_HISTORY
@@ -17,7 +17,7 @@ class CrashWatcherActivity : AppCompatActivity() {
     private val crashDataItems = mutableListOf<DisplayItem>()
 
     private val gson by lazy {
-        Gson()
+        GsonBuilder().setPrettyPrinting().create()
     }
 
     private val logs by lazy {
@@ -75,7 +75,7 @@ class CrashWatcherActivity : AppCompatActivity() {
             activityList = activityHistoryData?.activityList,
             fragmentList = fragmentHistoryData?.fragmentList
         )
-        return gson.toJson(shareData)
+        return gson.toJson(shareData).replace("\\", "")
     }
 
 }

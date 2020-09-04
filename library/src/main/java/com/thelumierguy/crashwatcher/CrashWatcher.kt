@@ -8,7 +8,7 @@ import android.os.Bundle
 import android.os.Process.myPid
 import android.util.Log
 import androidx.annotation.RestrictTo
-import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import com.thelumierguy.crashwatcher.data.ActivityData
 import com.thelumierguy.crashwatcher.data.ActivityHistoryData
 import com.thelumierguy.crashwatcher.data.FragmentData
@@ -26,7 +26,7 @@ import kotlin.system.exitProcess
 object CrashWatcher {
     private const val MAX_STACK_TRACE_SIZE = 131071
 
-    private val gson by lazy(LazyThreadSafetyMode.NONE) { Gson() }
+    private val gson by lazy(LazyThreadSafetyMode.NONE) { GsonBuilder().setPrettyPrinting().create() }
 
     private const val TIME_TO_CONSIDER_FOREGROUND_MS = 1000
     private var lastActivityCreatedTimestamp = 0L

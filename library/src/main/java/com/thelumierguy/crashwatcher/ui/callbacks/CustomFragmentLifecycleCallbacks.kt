@@ -6,13 +6,13 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
-import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import com.thelumierguy.crashwatcher.data.FragmentData
 import com.thelumierguy.crashwatcher.utils.toKeyValuesListPair
 
 class CustomFragmentLifecycleCallbacks(val onFragmentAdded: (FragmentData) -> Unit) {
 
-    private val gson = Gson()
+    private val gson = GsonBuilder().setPrettyPrinting().create()
 
     private val fragmentLifecycleCallbacks = object : FragmentManager.FragmentLifecycleCallbacks() {
 
