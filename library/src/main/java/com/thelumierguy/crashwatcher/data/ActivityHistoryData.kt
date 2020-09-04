@@ -4,30 +4,25 @@ import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-data class ScreenHistoryData(
-    val screenList: List<ScreenData>,
-    val screenDataStateList: MutableList<ScreenDataState> = screenList.map {
+data class ActivityHistoryData(
+    val activityList: List<ActivityData>,
+    val screenDataStateList: MutableList<ScreenDataState> = activityList.map {
         ScreenDataState.COLLAPSED
-    }.toMutableList()
+    }.toMutableList(),
+    override val title: String = ACTIVITY_TRACE
 ) : DisplayItem
 
 @Parcelize
-data class ScreenData(
+data class ActivityData(
     val screenName: String,
     val lastOpenedTimeStamp: Long,
     val intentKeys: List<String> = listOf(),
     val intentValues: List<String> = listOf()
 ) : Parcelable
 
-data class ShareData(
-    val stackTrace: String,
-    val screensList: List<ScreenData>
-)
-
 enum class ScreenDataState(val degreesToRotate: Float) {
     EXPANDED(180F),
     COLLAPSED(0F);
-
     fun toggle(): ScreenDataState {
         return if (this == EXPANDED) {
             COLLAPSED
@@ -35,4 +30,11 @@ enum class ScreenDataState(val degreesToRotate: Float) {
             EXPANDED
         }
     }
+
 }
+
+data class ShareData(
+    val stackTrace: String,
+    val activityList: List<ActivityData>?,
+    val fragmentList: List<FragmentData>?
+)

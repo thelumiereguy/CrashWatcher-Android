@@ -5,32 +5,31 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ShareCompat
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.gson.Gson
-import com.thelumierguy.crashwatcher.CrashWatcher.EXTRA_CRASH_LOG
-import com.thelumierguy.crashwatcher.CrashWatcher.EXTRA_SCREEN_HISTORY
-import com.thelumierguy.crashwatcher.data.CrashLogsData
-import com.thelumierguy.crashwatcher.data.DisplayItem
-import com.thelumierguy.crashwatcher.data.ScreenHistoryData
-import com.thelumierguy.crashwatcher.data.ShareData
+import com.thelumierguy.crashwatcher.EXTRA_ACTIVITY_HISTORY
+import com.thelumierguy.crashwatcher.EXTRA_CRASH_LOG
+import com.thelumierguy.crashwatcher.EXTRA_FRAGMENT_HISTORY
+import com.thelumierguy.crashwatcher.data.*
 import com.thelumierguy.crashwatcher.databinding.ActivityCrashwatcherBinding
 import com.thelumierguy.crashwatcher.ui.adapters.CrashWatcherPagerAdapter
 
 class CrashWatcherActivity : AppCompatActivity() {
 
-    private val tabTitles = listOf("Crash Logs", "Screen trace")
     private val crashDataItems = mutableListOf<DisplayItem>()
+
+    private val gson by lazy {
+        Gson()
+    }
 
     private val logs by lazy {
         intent.getStringExtra(EXTRA_CRASH_LOG) ?: ""
     }
 
-    val gson by lazy {
-        Gson()
+    private val activityHistoryData: ActivityHistoryData? by lazy {
+        intent.getParcelableExtra(EXTRA_ACTIVITY_HISTORY)
     }
 
-    private val screenTraceData by lazy {
-        intent.getParcelableExtra(EXTRA_SCREEN_HISTORY) ?: ScreenHistoryData(
-            listOf()
-        )
+    private val fragmentHistoryData: FragmentHistoryData? by lazy {
+        intent.getParcelableExtra(EXTRA_FRAGMENT_HISTORY)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,7 +42,8 @@ class CrashWatcherActivity : AppCompatActivity() {
 
     private fun getData() {
         crashDataItems.add(CrashLogsData(logs))
-        crashDataItems.add(screenTraceData)
+        activityHistoryData?.let { crashDataItems.add(it) }
+        fragmentHistoryData?.let { crashDataItems.add(it) }
     }
 
     private fun initViews(binding: ActivityCrashwatcherBinding) {
@@ -54,12 +54,14 @@ class CrashWatcherActivity : AppCompatActivity() {
             binding.tlTabs,
             binding.viewpager
         ) { tab, position ->
-            tab.text = tabTitles[position]
-            binding.viewpager.setCurrentItem(tab.position, true)
+            if (crashDataItems.isNotEmpty()) {
+                tab.text = crashDataItems[position].title
+                binding.viewpager.setCurrentItem(tab.position, true)
+            }
         }.attach()
         binding.fabShare.setOnClickListener {
             val shareData = getShareData()
-           ShareCompat.IntentBuilder.from(this)
+            ShareCompat.IntentBuilder.from(this)
                 .setType("text/plain")
                 .setText(shareData)
                 .startChooser()
@@ -70,7 +72,8 @@ class CrashWatcherActivity : AppCompatActivity() {
     private fun getShareData(): String {
         val shareData = ShareData(
             stackTrace = logs,
-            screensList = screenTraceData.screenList
+            activityList = activityHistoryData?.activityList,
+            fragmentList = fragmentHistoryData?.fragmentList
         )
         return gson.toJson(shareData)
     }

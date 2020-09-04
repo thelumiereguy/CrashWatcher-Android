@@ -2,7 +2,6 @@ package com.thelumierguy.crashwatcher
 
 import android.app.Activity
 import android.app.Application
-import android.app.Application.ActivityLifecycleCallbacks
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -10,11 +9,15 @@ import android.os.Process.myPid
 import android.util.Log
 import androidx.annotation.RestrictTo
 import com.google.gson.Gson
-import com.thelumierguy.crashwatcher.data.ScreenData
-import com.thelumierguy.crashwatcher.data.ScreenHistoryData
-import com.thelumierguy.crashwatcher.data.TrackingList
+import com.thelumierguy.crashwatcher.data.ActivityData
+import com.thelumierguy.crashwatcher.data.ActivityHistoryData
+import com.thelumierguy.crashwatcher.data.FragmentData
+import com.thelumierguy.crashwatcher.data.FragmentHistoryData
 import com.thelumierguy.crashwatcher.ui.CrashWatcherActivity
-import com.thelumierguy.crashwatcher.utils.toList
+import com.thelumierguy.crashwatcher.ui.callbacks.CustomActivityCallbacks
+import com.thelumierguy.crashwatcher.ui.callbacks.CustomFragmentLifecycleCallbacks
+import com.thelumierguy.crashwatcher.utils.TrackingList
+import com.thelumierguy.crashwatcher.utils.toKeyValuesListPair
 import java.io.*
 import java.lang.ref.WeakReference
 import kotlin.system.exitProcess
@@ -22,17 +25,22 @@ import kotlin.system.exitProcess
 
 object CrashWatcher {
     private const val MAX_STACK_TRACE_SIZE = 131071
-    val gson by lazy { Gson() }
+
+    private val gson by lazy(LazyThreadSafetyMode.NONE) { Gson() }
 
     private const val TIME_TO_CONSIDER_FOREGROUND_MS = 1000
     private var lastActivityCreatedTimestamp = 0L
     private lateinit var lastActivityCreated: WeakReference<Activity>
-    const val EXTRA_CRASH_LOG = "EXTRA_CRASH_LOG"
-    const val EXTRA_SCREEN_HISTORY = "EXTRA_SCREEN_HISTORY"
 
-    val screensList = TrackingList<ScreenData>(5)
+
+    private val activityList = TrackingList<ActivityData>(5)
+    private val fragmentList = TrackingList<FragmentData>(5)
 
     private var application: Application? = null
+
+    val customFragmentLifecycleCallbacks = CustomFragmentLifecycleCallbacks {
+        fragmentList.add(it)
+    }
 
     @RestrictTo(RestrictTo.Scope.LIBRARY)
     fun initCrashWatcher(context: Context?) {
@@ -43,7 +51,7 @@ object CrashWatcher {
 
                 Thread.setDefaultUncaughtExceptionHandler(object : Thread.UncaughtExceptionHandler {
                     override fun uncaughtException(p0: Thread, p1: Throwable) {
-                        if (isStackTraceLikelyConflictive(p1)) {
+                        if (isStackTraceLikelyConflicting(p1)) {
                             Log.e(
                                 "CrashWatcher",
                                 "Your application class or your error activity have crashed, the custom activity will not be launched!"
@@ -99,7 +107,12 @@ object CrashWatcher {
             ) + disclaimer;
         }
         intent.putExtra(EXTRA_CRASH_LOG, stackTraceString)
-        intent.putExtra(EXTRA_SCREEN_HISTORY, ScreenHistoryData(screensList))
+        if (activityList.isNotEmpty()) {
+            intent.putExtra(EXTRA_ACTIVITY_HISTORY, ActivityHistoryData(activityList))
+        }
+        if (fragmentList.isNotEmpty()) {
+            intent.putExtra(EXTRA_FRAGMENT_HISTORY, FragmentHistoryData(fragmentList))
+        }
         intent.flags =
             Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         application?.startActivity(intent);
@@ -107,7 +120,12 @@ object CrashWatcher {
 
     private fun initActivityTracker(): Unit? {
         return application?.registerActivityLifecycleCallbacks(
-            object : ActivityLifecycleCallbacks {
+            object : CustomActivityCallbacks() {
+
+                override fun onActivityPreCreated(activity: Activity, savedInstanceState: Bundle?) {
+                    super.onActivityPreCreated(activity, savedInstanceState)
+                    customFragmentLifecycleCallbacks.registerFragmentLifecycleCallbacks(activity)
+                }
 
                 override fun onActivityCreated(
                     activity: Activity,
@@ -118,12 +136,11 @@ object CrashWatcher {
                         // Ignore activityClass because we want the last
                         // application Activity that was started so that we can
                         // explicitly kill it off.
-                        lastActivityCreated =
-                            WeakReference(activity)
+                        lastActivityCreated = WeakReference(activity)
                         lastActivityCreatedTimestamp = System.currentTimeMillis()
-                        val intentData = activity.intent.toList(gson)
-                        screensList.add(
-                            ScreenData(
+                        val intentData = activity.intent.toKeyValuesListPair(gson)
+                        activityList.add(
+                            ActivityData(
                                 activity.localClassName,
                                 System.currentTimeMillis(),
                                 intentKeys = intentData.first,
@@ -133,32 +150,14 @@ object CrashWatcher {
                     }
                 }
 
-                override fun onActivityStarted(activity: Activity) {
-                }
-
-                override fun onActivityResumed(activity: Activity) {
-                }
-
-                override fun onActivityPaused(activity: Activity) {
-
-                }
-
-                override fun onActivityStopped(activity: Activity) {
-                }
-
-                override fun onActivitySaveInstanceState(
-                    activity: Activity,
-                    outState: Bundle
-                ) {
-                }
-
                 override fun onActivityDestroyed(activity: Activity) {
+                    customFragmentLifecycleCallbacks.unregisterFragmentLifecycleCallbacks(activity)
                 }
             })
     }
 
 
-    private fun isStackTraceLikelyConflictive(
+    private fun isStackTraceLikelyConflicting(
         throwable: Throwable
     ): Boolean {
         var process: String?
@@ -184,3 +183,7 @@ object CrashWatcher {
         return false
     }
 }
+
+const val EXTRA_CRASH_LOG = "EXTRA_CRASH_LOG"
+const val EXTRA_ACTIVITY_HISTORY = "EXTRA_ACTIVITY_HISTORY"
+const val EXTRA_FRAGMENT_HISTORY = "EXTRA_FRAGMENT_HISTORY"

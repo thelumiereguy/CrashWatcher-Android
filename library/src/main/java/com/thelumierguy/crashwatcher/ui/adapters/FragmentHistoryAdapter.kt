@@ -6,19 +6,16 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.transition.ChangeBounds
-import androidx.transition.Fade
 import androidx.transition.TransitionManager
 import androidx.transition.TransitionSet
-import com.thelumierguy.crashwatcher.data.ScreenData
-import com.thelumierguy.crashwatcher.data.ScreenDataState
-import com.thelumierguy.crashwatcher.data.ScreenHistoryData
+import com.thelumierguy.crashwatcher.data.*
 import com.thelumierguy.crashwatcher.databinding.LayoutScreenHistoryListItemBinding
 import com.thelumierguy.crashwatcher.utils.getFormattedDate
 
 
-class ScreenHistoryAdapter(private val screenHistoryData: ScreenHistoryData) :
+class FragmentHistoryAdapter(private val fragmentHistoryData: FragmentHistoryData) :
 
-    RecyclerView.Adapter<ScreenHistoryAdapter.ScreenHistoryViewHolder>() {
+    RecyclerView.Adapter<FragmentHistoryAdapter.ScreenHistoryViewHolder>() {
 
     private val transition by lazy {
         TransitionSet().addTransition(
@@ -34,9 +31,9 @@ class ScreenHistoryAdapter(private val screenHistoryData: ScreenHistoryData) :
     }
 
     override fun onBindViewHolder(holder: ScreenHistoryViewHolder, position: Int) {
-        val screen = screenHistoryData.screenList[position]
-        var screenDataState = screenHistoryData.screenDataStateList[position]
-        val shouldShowExtrasData = screen.intentKeys.isNullOrEmpty().not()
+        val screen = fragmentHistoryData.fragmentList[position]
+        var screenDataState = fragmentHistoryData.screenDataStateList[position]
+        val shouldShowExtrasData = screen.bundleKeys.isNullOrEmpty().not()
         holder.viewBinding.apply {
             tvScreenName.text = screen.screenName
             tvOpenedAt.text = getFormattedDate(screen.lastOpenedTimeStamp)
@@ -47,7 +44,7 @@ class ScreenHistoryAdapter(private val screenHistoryData: ScreenHistoryData) :
                 holder.viewBinding.ivToggle.setOnClickListener {
                     screenDataState = screenDataState.toggle()
                     updateScreenDataListState(screenDataState, holder)
-                    screenHistoryData.screenDataStateList[position] = screenDataState
+                    fragmentHistoryData.screenDataStateList[position] = screenDataState
                     holder.viewBinding.clRoot.post {
                         rotateToggle(screenDataState, holder)
                     }
@@ -59,11 +56,11 @@ class ScreenHistoryAdapter(private val screenHistoryData: ScreenHistoryData) :
 
     private fun initScreenData(
         holder: ScreenHistoryViewHolder,
-        screenData: ScreenData
+        activityData: FragmentData
     ) {
         holder.viewBinding.rvScreenData.apply {
             layoutManager = LinearLayoutManager(context)
-            adapter = IntentDataAdapter(screenData.intentKeys, screenData.intentValues)
+            adapter = IntentDataAdapter(activityData.bundleKeys, activityData.bundleValues)
         }
     }
 
@@ -82,7 +79,7 @@ class ScreenHistoryAdapter(private val screenHistoryData: ScreenHistoryData) :
     }
 
     override fun getItemCount(): Int {
-        return screenHistoryData.screenList.size
+        return fragmentHistoryData.fragmentList.size
     }
 
     class ScreenHistoryViewHolder(val viewBinding: LayoutScreenHistoryListItemBinding) :

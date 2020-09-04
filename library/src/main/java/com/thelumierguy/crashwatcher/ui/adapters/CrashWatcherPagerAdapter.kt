@@ -5,11 +5,15 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.thelumierguy.crashwatcher.CrashWatcher
+import com.thelumierguy.crashwatcher.EXTRA_ACTIVITY_HISTORY
+import com.thelumierguy.crashwatcher.EXTRA_CRASH_LOG
+import com.thelumierguy.crashwatcher.EXTRA_FRAGMENT_HISTORY
 import com.thelumierguy.crashwatcher.data.CrashLogsData
 import com.thelumierguy.crashwatcher.data.DisplayItem
+import com.thelumierguy.crashwatcher.data.FragmentHistoryData
+import com.thelumierguy.crashwatcher.ui.fragments.ActivityHistoryFragment
 import com.thelumierguy.crashwatcher.ui.fragments.CrashLogsFragment
-import com.thelumierguy.crashwatcher.ui.fragments.ScreenHistoryFragment
+import com.thelumierguy.crashwatcher.ui.fragments.FragmentHistoryFragment
 
 class CrashWatcherPagerAdapter(
     private val crashDataItems: MutableList<DisplayItem>,
@@ -27,14 +31,21 @@ class CrashWatcherPagerAdapter(
                 is CrashLogsData -> {
                     CrashLogsFragment().apply {
                         arguments = bundleOf(
-                            Pair(CrashWatcher.EXTRA_CRASH_LOG, crashDataItems[position])
+                            Pair(EXTRA_CRASH_LOG, crashDataItems[position])
+                        )
+                    }
+                }
+                is FragmentHistoryData -> {
+                    FragmentHistoryFragment().apply {
+                        arguments = bundleOf(
+                            Pair(EXTRA_FRAGMENT_HISTORY, crashDataItems[position])
                         )
                     }
                 }
                 else -> {
-                    ScreenHistoryFragment().apply {
+                    ActivityHistoryFragment().apply {
                         arguments = bundleOf(
-                            Pair(CrashWatcher.EXTRA_SCREEN_HISTORY, crashDataItems[position])
+                            Pair(EXTRA_ACTIVITY_HISTORY, crashDataItems[position])
                         )
                     }
                 }

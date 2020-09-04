@@ -1,5 +1,6 @@
 package com.thelumierguy.crashwatcher.data
 
+import com.thelumierguy.crashwatcher.utils.TrackingList
 import org.junit.Test
 
 

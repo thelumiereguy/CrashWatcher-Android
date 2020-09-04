@@ -1,4 +1,4 @@
-package com.thelumierguy.crashwatcher.data
+package com.thelumierguy.crashwatcher.utils
 
 class TrackingList<T>(private val maxSize: Int) : MutableList<T> {
 
