@@ -73,7 +73,7 @@ object CrashWatcher {
                     Log.e(
                         TAG,
                         "Your application class or your error activity have crashed, the custom activity will not be launched!"
-                    );
+                    )
                     if (defaultExceptionHandler != null) {
                         defaultExceptionHandler.uncaughtException(p0, p1)
                         return
@@ -175,14 +175,14 @@ object CrashWatcher {
     private fun isStackTraceConflicting(
         throwable: Throwable
     ): Boolean {
-        var process: String?
-        try {
-            val br = BufferedReader(FileReader("/proc/self/cmdline"))
-            process = br.readLine().trim()
-            br.close()
-        } catch (e: IOException) {
-            process = null
-        }
+//        var process: String?
+//        try {
+//            val br = BufferedReader(FileReader("/proc/self/cmdline"))
+//            process = br.readLine().trim()
+//            br.close()
+//        } catch (e: IOException) {
+//            process = null
+//        }
 //        if (process != null && process.endsWith(":error_activity")) {
 //            //Error happened in the error activity process - conflictive, so use default handler
 //            return true
