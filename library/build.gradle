@@ -4,6 +4,7 @@ plugins {
     id 'kotlin-kapt'
     id 'kotlin-android-extensions'
 }
+group='com.lumiereguy'
 
 android {
     compileSdkVersion 30
