@@ -13,7 +13,7 @@
 
     <style name="TabTitleTextStyle">
         <item name="fontFamily">sans-serif-black</item>
-        <item name="android:textSize">32sp</item>
+        <item name="android:textSize">@dimen/tab_title_text</item>
         <item name="android:textColor">@color/selector_tab_text_color</item>
     </style>
 </resources>

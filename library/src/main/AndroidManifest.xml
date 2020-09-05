@@ -5,9 +5,8 @@
     <application>
         <activity
             android:name=".ui.CrashWatcherActivity"
-            android:theme="@style/Theme.CrashWatcher"
-           >
-        </activity>
+            android:process=":error_activity"
+            android:theme="@style/Theme.CrashWatcher" />
 
         <provider
             android:name=".CrashContentProvider"

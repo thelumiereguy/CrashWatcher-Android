@@ -5,6 +5,7 @@ import android.app.Application
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.Process
 import android.os.Process.myPid
 import android.util.Log
 import androidx.annotation.RestrictTo
@@ -26,9 +27,13 @@ import kotlin.system.exitProcess
 object CrashWatcher {
     private const val MAX_STACK_TRACE_SIZE = 131071
 
-    private val gson by lazy(LazyThreadSafetyMode.NONE) { GsonBuilder().setPrettyPrinting().create() }
+    val TAG = "CrashWatcher"
 
-    private const val TIME_TO_CONSIDER_FOREGROUND_MS = 1000
+    private val gson by lazy(LazyThreadSafetyMode.NONE) {
+        GsonBuilder().setPrettyPrinting().create()
+    }
+
+    private const val TIME_TO_CONSIDER_ACTIVITY_CREATED_MS = 100
     private var lastActivityCreatedTimestamp = 0L
     private lateinit var lastActivityCreated: WeakReference<Activity>
 
@@ -48,74 +53,84 @@ object CrashWatcher {
             context?.let {
                 val defaultExceptionHandler = Thread.getDefaultUncaughtExceptionHandler()
                 application = context.applicationContext as Application
-
-                Thread.setDefaultUncaughtExceptionHandler(object : Thread.UncaughtExceptionHandler {
-                    override fun uncaughtException(p0: Thread, p1: Throwable) {
-                        if (isStackTraceLikelyConflicting(p1)) {
-                            Log.e(
-                                "CrashWatcher",
-                                "Your application class or your error activity have crashed, the custom activity will not be launched!"
-                            );
-                            if (defaultExceptionHandler != null) {
-                                defaultExceptionHandler.uncaughtException(p0, p1)
-                                return
-                            }
-                        } else if (System.currentTimeMillis() - lastActivityCreatedTimestamp >= TIME_TO_CONSIDER_FOREGROUND_MS) {
-                            startCrashReportActivity(p1)
-                        } else {
-                            if (defaultExceptionHandler != null) {
-                                defaultExceptionHandler.uncaughtException(p0, p1)
-                                return
-                            }
-                        }
-                        if (::lastActivityCreated.isInitialized) {
-                            val lastActivity = lastActivityCreated.get()
-                            if (lastActivity != null) {
-                                //We finish the activity, this solves a bug which causes infinite recursion.
-                                //See: https://github.com/ACRA/acra/issues/42
-                                lastActivity.finish()
-                                lastActivityCreated.clear()
-                            }
-                        }
-                        android.os.Process.killProcess(myPid())
-                        exitProcess(10);
-                    }
-                })
+                setCustomExceptionHandler(defaultExceptionHandler)
                 initActivityTracker()
             }
         } catch (t: Throwable) {
             Log.e(
-                "CrashWatcher",
-                "An unknown error occurred while installing CustomActivityOnCrash, it may not have been properly initialized. Please report this as a bug if needed.",
+                TAG,
+                "An unknown error occurred while installing CustomActivityOnCrash, " +
+                        "it may not have been properly initialized. Please report this as a bug if needed.",
                 t
             )
         }
     }
 
-    private fun startCrashReportActivity(throwable: Throwable) {
-        val intent = Intent(application, CrashWatcherActivity::class.java);
-        val sw = StringWriter();
-        val pw = PrintWriter(sw);
-        throwable.printStackTrace(pw);
-        var stackTraceString = sw.toString();
+    private fun setCustomExceptionHandler(defaultExceptionHandler: Thread.UncaughtExceptionHandler?) {
+        Thread.setDefaultUncaughtExceptionHandler(object : Thread.UncaughtExceptionHandler {
+            override fun uncaughtException(p0: Thread, p1: Throwable) {
+                if (isStackTraceConflicting(p1)) {
+                    Log.e(
+                        TAG,
+                        "Your application class or your error activity have crashed, the custom activity will not be launched!"
+                    );
+                    if (defaultExceptionHandler != null) {
+                        defaultExceptionHandler.uncaughtException(p0, p1)
+                        return
+                    }
+                } else if (System.currentTimeMillis() - lastActivityCreatedTimestamp >= TIME_TO_CONSIDER_ACTIVITY_CREATED_MS) {
+                    startCrashReportActivity(p1)
+                } else {
+                    if (defaultExceptionHandler != null) {
+                        defaultExceptionHandler.uncaughtException(p0, p1)
+                        return
+                    }
+                }
+                if (::lastActivityCreated.isInitialized) {
+                    val lastActivity = lastActivityCreated.get()
+                    if (lastActivity != null) {
+                        //We finish the activity, this solves a bug which causes infinite recursion.
+                        //See: https://github.com/ACRA/acra/issues/42
+                        lastActivity.finish()
+                        lastActivityCreated.clear()
+                    }
+                }
+                Process.killProcess(myPid())
+                exitProcess(10)
+            }
+        })
+    }
 
-        if (stackTraceString.length > MAX_STACK_TRACE_SIZE) {
+    private fun startCrashReportActivity(throwable: Throwable) {
+        val sw = StringWriter()
+        val pw = PrintWriter(sw)
+        throwable.printStackTrace(pw)
+        val stackTraceString = sw.toString().apply {
+            trimStackTrace(this)
+        }
+        val intent = Intent(application, CrashWatcherActivity::class.java).apply {
+            putExtra(EXTRA_CRASH_LOG, stackTraceString)
+            if (activityList.isNotEmpty()) {
+                putExtra(EXTRA_ACTIVITY_HISTORY, ActivityHistoryData(activityList))
+            }
+            if (fragmentList.isNotEmpty()) {
+                putExtra(EXTRA_FRAGMENT_HISTORY, FragmentHistoryData(fragmentList))
+            }
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
+        application?.startActivity(intent);
+    }
+
+    private fun trimStackTrace(stackTraceString: String): String {
+        var stackTraceString1 = stackTraceString
+        if (stackTraceString1.length > MAX_STACK_TRACE_SIZE) {
             val disclaimer = " [stack trace too large]";
-            stackTraceString = stackTraceString.substring(
+            stackTraceString1 = stackTraceString1.substring(
                 0,
                 MAX_STACK_TRACE_SIZE - disclaimer.length
             ) + disclaimer;
         }
-        intent.putExtra(EXTRA_CRASH_LOG, stackTraceString)
-        if (activityList.isNotEmpty()) {
-            intent.putExtra(EXTRA_ACTIVITY_HISTORY, ActivityHistoryData(activityList))
-        }
-        if (fragmentList.isNotEmpty()) {
-            intent.putExtra(EXTRA_FRAGMENT_HISTORY, FragmentHistoryData(fragmentList))
-        }
-        intent.flags =
-            Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        application?.startActivity(intent);
+        return stackTraceString1
     }
 
     private fun initActivityTracker(): Unit? {
@@ -157,7 +172,7 @@ object CrashWatcher {
     }
 
 
-    private fun isStackTraceLikelyConflicting(
+    private fun isStackTraceConflicting(
         throwable: Throwable
     ): Boolean {
         var process: String?
