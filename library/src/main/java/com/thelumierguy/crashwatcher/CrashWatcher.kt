@@ -183,10 +183,10 @@ object CrashWatcher {
         } catch (e: IOException) {
             process = null
         }
-        if (process != null && process.endsWith(":error_activity")) {
-            //Error happened in the error activity process - conflictive, so use default handler
-            return true
-        }
+//        if (process != null && process.endsWith(":error_activity")) {
+//            //Error happened in the error activity process - conflictive, so use default handler
+//            return true
+//        }
         do {
             val stackTrace = throwable.stackTrace
             for (element in stackTrace) {
