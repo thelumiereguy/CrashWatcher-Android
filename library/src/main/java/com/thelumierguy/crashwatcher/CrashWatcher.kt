@@ -156,7 +156,7 @@ object CrashWatcher {
                         val intentData = activity.intent.toKeyValuesListPair(gson)
                         activityList.add(
                             ActivityData(
-                                activity.localClassName,
+                                activity::class.java.simpleName,
                                 System.currentTimeMillis(),
                                 intentKeys = intentData.first,
                                 intentValues = intentData.second
