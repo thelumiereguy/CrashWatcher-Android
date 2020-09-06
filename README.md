@@ -16,6 +16,6 @@ repositories {
 }  
   
 dependencies {  
- implementation 'com.github.thelumiereguy:NeumorphismView-Android:1.5'  
+ implementation 'com.github.thelumiereguy:CrashWatcher-Android:1.4'  
 }  
 ```
