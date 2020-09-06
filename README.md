@@ -1,12 +1,23 @@
 # CrashWatcher
 
-### A Custom Uncaught Exception Handler, which can be used to pinpoint crashes. It will show the stacktrace of the crash, the screens (Activities and Fragments) which lead up to the crash, and the intents and bundle data sent to those screens.  
+### A Custom Uncaught Exception Handler, which can be used to pinpoint crashe, which includes :
+- Stacktrace of the crash
+- The screens (Activities and Fragments) which lead up to the crash
+- The intents and bundle data sent to those screens. 
+
+</br> 
 
 [![Release](https://img.shields.io/badge/release-1.4-blue?style=for-the-badge)](https://jitpack.io/#thelumiereguy/CrashWatcher-Android) [![API](https://img.shields.io/badge/API-19%2B-orange?style=for-the-badge)](https://android-arsenal.com/api?level=19) [![Twitter](https://img.shields.io/badge/twitter-thelumiereguy-blue?style=for-the-badge)](https://twitter.com/thelumiereguy)
 
 # Table of Contents  
 
+- [Example](#example)  
 - [Installation](#installation)  
+- [TODO](#todo)  
+
+# Example  
+
+[![Iscreen](https://user-images.githubusercontent.com/46375353/92323951-6fb3d200-f05a-11ea-82f3-5b2891bcc6a1.png)]()
 
 # Installation  
 
@@ -19,3 +30,6 @@ dependencies {
  implementation 'com.github.thelumiereguy:CrashWatcher-Android:1.4'  
 }  
 ```
+
+# TODO  
+* Add more customizability to the tracking
