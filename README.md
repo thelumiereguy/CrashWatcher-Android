@@ -3,7 +3,8 @@
 ### A Custom Uncaught Exception Handler, which can be used to pinpoint crashe, which includes :
 - Stacktrace of the crash
 - The screens (Activities and Fragments) which lead up to the crash
-- The intents and bundle data sent to those screens. 
+- The intents and bundle data sent to those screens
+- Share the above data to other apps or just copy the text.
 
 </br> 
 
