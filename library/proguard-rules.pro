@@ -19,3 +19,36 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+-keepnames class com.google.gson.** {*;}
+-keepnames enum com.google.gson.** {*;}
+-keepnames interface com.google.gson.** {*;}
+-keep class com.google.gson.** { *; }
+-keepnames class org.** {*;}
+-keepnames enum org.** {*;}
+-keepnames interface org.** {*;}
+-keep class org.** { *; }
+
+-keepnames class com.thelumierguy.crashwatcher.data.** {*;}
+-keepnames enum com.thelumierguy.crashwatcher.data.** {*;}
+-keepnames interface com.thelumierguy.crashwatcher.data.** {*;}
+-keep class com.thelumierguy.crashwatcher.data.** { *; }
+
+-keepattributes Signature
+-keepattributes *Annotation*
+-keep class sun.misc.Unsafe { *; }
+-keep class com.google.gson.stream.** { *; }
+
+-keepclassmembers enum * {
+    public static **[] values();
+    public static ** valueOf(java.lang.String);
+}
+
+-assumenosideeffects class android.util.Log {
+    public static boolean isLoggable(java.lang.String, int);
+    public static int v(...);
+    public static int i(...);
+    public static int w(...);
+    public static int d(...);
+    public static int e(...);
+}

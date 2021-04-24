@@ -1,7 +1,7 @@
 package com.thelumierguy.crashwatcher.data
 
 import android.os.Parcelable
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class ActivityHistoryData(
@@ -23,6 +23,7 @@ data class ActivityData(
 enum class ScreenDataState(val degreesToRotate: Float) {
     EXPANDED(180F),
     COLLAPSED(0F);
+
     fun toggle(): ScreenDataState {
         return if (this == EXPANDED) {
             COLLAPSED
