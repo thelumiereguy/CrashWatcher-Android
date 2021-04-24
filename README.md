@@ -28,11 +28,11 @@ repositories {
 }  
   
 dependencies {  
- implementation 'com.github.thelumiereguy:CrashWatcher-Android:1.5'
+ implementation 'com.github.thelumiereguy:CrashWatcher-Android:1.6'
  
  //OR 
  //if you only want to enable this in Debug Builds
- debugImplementation 'com.github.thelumiereguy:CrashWatcher-Android:1.5'
+ debugImplementation 'com.github.thelumiereguy:CrashWatcher-Android:1.6'
 }  
 ```
 

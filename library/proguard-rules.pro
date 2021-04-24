@@ -33,6 +33,7 @@
 -keepnames enum com.thelumierguy.crashwatcher.data.** {*;}
 -keepnames interface com.thelumierguy.crashwatcher.data.** {*;}
 -keep class com.thelumierguy.crashwatcher.data.** { *; }
+-keep class com.thelumierguy.crashwatcher.CrashWatcher { *; }
 
 -keepattributes Signature
 -keepattributes *Annotation*
