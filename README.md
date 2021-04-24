@@ -8,7 +8,7 @@
 
 </br> 
 
-[![Release](https://img.shields.io/badge/release-1.7-blue?style=for-the-badge)](https://jitpack.io/#thelumiereguy/CrashWatcher-Android) [![API](https://img.shields.io/badge/API-19%2B-orange?style=for-the-badge)](https://android-arsenal.com/api?level=19) [![Twitter](https://img.shields.io/badge/twitter-thelumiereguy-blue?style=for-the-badge)](https://twitter.com/thelumiereguy)
+[![Release](https://img.shields.io/badge/release-1.8-blue?style=for-the-badge)](https://jitpack.io/#thelumiereguy/CrashWatcher-Android) [![API](https://img.shields.io/badge/API-19%2B-orange?style=for-the-badge)](https://android-arsenal.com/api?level=19) [![Twitter](https://img.shields.io/badge/twitter-thelumiereguy-blue?style=for-the-badge)](https://twitter.com/thelumiereguy)
 
 # Table of Contents  
 
@@ -28,11 +28,11 @@ repositories {
 }  
   
 dependencies {  
- implementation 'com.github.thelumiereguy:CrashWatcher-Android:1.7'
+ implementation 'com.github.thelumiereguy:CrashWatcher-Android:1.8'
  
  //OR 
  //if you only want to enable this in Debug Builds
- debugImplementation 'com.github.thelumiereguy:CrashWatcher-Android:1.7'
+ debugImplementation 'com.github.thelumiereguy:CrashWatcher-Android:1.8'
 }  
 ```
 
