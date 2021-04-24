@@ -26,7 +26,7 @@ class CustomFragmentLifecycleCallbacks(val onFragmentAdded: (FragmentData) -> Un
             val args = f.arguments.toKeyValuesListPair(gson)
             onFragmentAdded(
                 FragmentData(
-                    f.javaClass.canonicalName,
+                    f.javaClass.name,
                     System.currentTimeMillis(),
                     args.first,
                     args.second
