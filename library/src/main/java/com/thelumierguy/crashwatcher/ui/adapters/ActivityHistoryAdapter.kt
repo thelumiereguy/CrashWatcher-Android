@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.transition.ChangeBounds
 import androidx.transition.TransitionManager
 import androidx.transition.TransitionSet
+import com.thelumierguy.crashwatcher.R
 import com.thelumierguy.crashwatcher.databinding.LayoutScreenHistoryListItemBinding
 import com.thelumierguy.crashwatcher.ui.adapters.data.ActivityData
 import com.thelumierguy.crashwatcher.ui.adapters.data.ActivityHistoryData
@@ -36,6 +37,7 @@ class ActivityHistoryAdapter(private val activityHistoryData: ActivityHistoryDat
         var screenDataState = activityHistoryData.screenDataStateList[position]
         val shouldShowExtrasData = screen.intentKeys.isNullOrEmpty().not()
         holder.viewBinding.apply {
+            tvTitle.text = root.context.getString(R.string.activity_name)
             tvScreenName.text = screen.screenName
             tvOpenedAt.text = getFormattedDate(screen.lastOpenedTimeStamp)
             holder.viewBinding.ivToggle.isVisible = shouldShowExtrasData

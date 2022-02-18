@@ -5,8 +5,8 @@
       <map>
         <entry key="library/src/main/res/layout/fragment_crash_logs.xml" value="0.1453125" />
         <entry key="library/src/main/res/layout/fragment_screen_history.xml" value="0.30885416666666665" />
-        <entry key="library/src/main/res/layout/layout_intent_data_list_item.xml" value="0.30885416666666665" />
-        <entry key="library/src/main/res/layout/layout_screen_history_list_item.xml" value="0.7287917737789203" />
+        <entry key="library/src/main/res/layout/layout_intent_data_list_item.xml" value="0.5" />
+        <entry key="library/src/main/res/layout/layout_screen_history_list_item.xml" value="0.5" />
       </map>
     </option>
   </component>
