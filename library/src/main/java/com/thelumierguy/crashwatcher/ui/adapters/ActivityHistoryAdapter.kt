@@ -8,11 +8,10 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.transition.ChangeBounds
 import androidx.transition.TransitionManager
 import androidx.transition.TransitionSet
-import com.thelumierguy.crashwatcher.data.ActivityData
-import com.thelumierguy.crashwatcher.data.ScreenDataState
-import com.thelumierguy.crashwatcher.data.ActivityHistoryData
 import com.thelumierguy.crashwatcher.databinding.LayoutScreenHistoryListItemBinding
-import com.thelumierguy.crashwatcher.utils.getFormattedDate
+import com.thelumierguy.crashwatcher.ui.adapters.data.ActivityData
+import com.thelumierguy.crashwatcher.ui.adapters.data.ActivityHistoryData
+import com.thelumierguy.crashwatcher.ui.adapters.data.ScreenDataState
 
 
 class ActivityHistoryAdapter(private val activityHistoryData: ActivityHistoryData) :
@@ -43,7 +42,7 @@ class ActivityHistoryAdapter(private val activityHistoryData: ActivityHistoryDat
             if (shouldShowExtrasData) {
                 initScreenData(holder, screen)
                 updateScreenDataListState(screenDataState, holder)
-                holder.viewBinding.ivToggle.setOnClickListener {
+                holder.viewBinding.clRoot.setOnClickListener {
                     screenDataState = screenDataState.toggle()
                     updateScreenDataListState(screenDataState, holder)
                     activityHistoryData.screenDataStateList[position] = screenDataState

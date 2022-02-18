@@ -1,3 +1,12 @@
 include ':library'
 include ':sample'
 rootProject.name = "CrashWatcher-Android"
+
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+        maven { url "https://jitpack.io" }
+    }
+}

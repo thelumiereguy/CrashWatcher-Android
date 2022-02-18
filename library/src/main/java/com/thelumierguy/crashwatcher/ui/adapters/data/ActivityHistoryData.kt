@@ -1,4 +1,4 @@
-package com.thelumierguy.crashwatcher.data
+package com.thelumierguy.crashwatcher.ui.adapters.data
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
@@ -10,7 +10,7 @@ data class ActivityHistoryData(
         ScreenDataState.COLLAPSED
     }.toMutableList(),
     override val title: String = ACTIVITY_TRACE
-) : DisplayItem
+) : DisplayItem, Parcelable
 
 @Parcelize
 data class ActivityData(
@@ -31,11 +31,6 @@ enum class ScreenDataState(val degreesToRotate: Float) {
             EXPANDED
         }
     }
-
 }
 
-data class ShareData(
-    val stackTrace: String,
-    val activityList: List<ActivityData>?,
-    val fragmentList: List<FragmentData>?
-)
+private const val ACTIVITY_TRACE = "Activity Trace"

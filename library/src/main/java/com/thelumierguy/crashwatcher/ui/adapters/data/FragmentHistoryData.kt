@@ -1,4 +1,4 @@
-package com.thelumierguy.crashwatcher.data
+package com.thelumierguy.crashwatcher.ui.adapters.data
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
@@ -10,7 +10,7 @@ data class FragmentHistoryData(
         ScreenDataState.COLLAPSED
     }.toMutableList(),
     override val title: String = FRAGMENT_TRACE
-) : DisplayItem
+) : DisplayItem, Parcelable
 
 @Parcelize
 data class FragmentData(
@@ -19,3 +19,5 @@ data class FragmentData(
     val bundleKeys: List<String> = listOf(),
     val bundleValues: List<String> = listOf()
 ) : Parcelable
+
+private const val FRAGMENT_TRACE = "Fragment Trace"

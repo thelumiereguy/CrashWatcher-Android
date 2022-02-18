@@ -8,8 +8,7 @@ import com.thelumierguy.crashwatcher.databinding.LayoutIntentDataListItemBinding
 class IntentDataAdapter(
     private val intentKeys: List<String>,
     private val intentValues: List<String>
-) :
-    RecyclerView.Adapter<IntentDataAdapter.IntentDataViewHolder>() {
+) : RecyclerView.Adapter<IntentDataAdapter.IntentDataViewHolder>() {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): IntentDataViewHolder {

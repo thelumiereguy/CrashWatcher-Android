@@ -4,14 +4,8 @@
 
     <application>
         <activity
-            android:name=".ui.CrashWatcherActivity"
+            android:name=".ui.activity.CrashDetailsActivity"
             android:theme="@style/Theme.CrashWatcher" />
-
-        <provider
-            android:name=".CrashContentProvider"
-            android:authorities="${applicationId}.CrashContentProvider"
-            android:exported="false"
-            android:initOrder="101" />
     </application>
 
 </manifest>

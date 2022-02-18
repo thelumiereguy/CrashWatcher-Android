@@ -5,18 +5,18 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.thelumierguy.crashwatcher.EXTRA_ACTIVITY_HISTORY
-import com.thelumierguy.crashwatcher.EXTRA_CRASH_LOG
-import com.thelumierguy.crashwatcher.EXTRA_FRAGMENT_HISTORY
-import com.thelumierguy.crashwatcher.data.CrashLogsData
-import com.thelumierguy.crashwatcher.data.DisplayItem
-import com.thelumierguy.crashwatcher.data.FragmentHistoryData
+import com.thelumierguy.crashwatcher.ui.activity.CrashDetailsActivity.Companion.EXTRA_ACTIVITY_HISTORY
+import com.thelumierguy.crashwatcher.ui.activity.CrashDetailsActivity.Companion.EXTRA_CRASH_LOG
+import com.thelumierguy.crashwatcher.ui.activity.CrashDetailsActivity.Companion.EXTRA_FRAGMENT_HISTORY
+import com.thelumierguy.crashwatcher.ui.adapters.data.CrashLogsData
+import com.thelumierguy.crashwatcher.ui.adapters.data.DisplayItem
+import com.thelumierguy.crashwatcher.ui.adapters.data.FragmentHistoryData
 import com.thelumierguy.crashwatcher.ui.fragments.ActivityHistoryFragment
 import com.thelumierguy.crashwatcher.ui.fragments.CrashLogsFragment
 import com.thelumierguy.crashwatcher.ui.fragments.FragmentHistoryFragment
 
-class CrashWatcherPagerAdapter(
-    private val crashDataItems: MutableList<DisplayItem>,
+internal class CrashWatcherPagerAdapter(
+    private val crashDataItems: List<DisplayItem>,
     fragmentManager: FragmentManager,
     lifecycle: Lifecycle
 ) : FragmentStateAdapter(fragmentManager, lifecycle) {

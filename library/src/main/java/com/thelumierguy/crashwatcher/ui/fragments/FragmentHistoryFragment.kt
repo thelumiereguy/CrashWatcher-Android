@@ -4,17 +4,14 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.thelumierguy.crashwatcher.EXTRA_ACTIVITY_HISTORY
-import com.thelumierguy.crashwatcher.EXTRA_FRAGMENT_HISTORY
 import com.thelumierguy.crashwatcher.R
-import com.thelumierguy.crashwatcher.data.ActivityHistoryData
-import com.thelumierguy.crashwatcher.data.FragmentHistoryData
 import com.thelumierguy.crashwatcher.databinding.FragmentScreenHistoryBinding
-import com.thelumierguy.crashwatcher.ui.adapters.ActivityHistoryAdapter
+import com.thelumierguy.crashwatcher.ui.activity.CrashDetailsActivity.Companion.EXTRA_FRAGMENT_HISTORY
 import com.thelumierguy.crashwatcher.ui.adapters.FragmentHistoryAdapter
+import com.thelumierguy.crashwatcher.ui.adapters.data.FragmentHistoryData
 
 
-class FragmentHistoryFragment : Fragment(R.layout.fragment_screen_history) {
+internal class FragmentHistoryFragment : Fragment(R.layout.fragment_screen_history) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val fragmentHistoryData =

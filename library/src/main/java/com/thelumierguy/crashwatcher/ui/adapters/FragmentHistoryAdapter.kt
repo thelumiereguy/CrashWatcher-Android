@@ -8,10 +8,10 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.transition.ChangeBounds
 import androidx.transition.TransitionManager
 import androidx.transition.TransitionSet
-import com.thelumierguy.crashwatcher.data.*
 import com.thelumierguy.crashwatcher.databinding.LayoutScreenHistoryListItemBinding
-import com.thelumierguy.crashwatcher.utils.getFormattedDate
-
+import com.thelumierguy.crashwatcher.ui.adapters.data.FragmentData
+import com.thelumierguy.crashwatcher.ui.adapters.data.FragmentHistoryData
+import com.thelumierguy.crashwatcher.ui.adapters.data.ScreenDataState
 
 class FragmentHistoryAdapter(private val fragmentHistoryData: FragmentHistoryData) :
 
@@ -22,7 +22,6 @@ class FragmentHistoryAdapter(private val fragmentHistoryData: FragmentHistoryDat
             ChangeBounds().setDuration(100L)
         )
     }
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ScreenHistoryViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -41,7 +40,7 @@ class FragmentHistoryAdapter(private val fragmentHistoryData: FragmentHistoryDat
             if (shouldShowExtrasData) {
                 initScreenData(holder, screen)
                 updateScreenDataListState(screenDataState, holder)
-                holder.viewBinding.ivToggle.setOnClickListener {
+                holder.viewBinding.clRoot.setOnClickListener {
                     screenDataState = screenDataState.toggle()
                     updateScreenDataListState(screenDataState, holder)
                     fragmentHistoryData.screenDataStateList[position] = screenDataState

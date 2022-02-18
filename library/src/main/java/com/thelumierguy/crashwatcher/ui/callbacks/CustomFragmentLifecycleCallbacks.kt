@@ -7,7 +7,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import com.google.gson.GsonBuilder
-import com.thelumierguy.crashwatcher.data.FragmentData
+import com.thelumierguy.crashwatcher.ui.adapters.data.FragmentData
 import com.thelumierguy.crashwatcher.utils.toKeyValuesListPair
 
 class CustomFragmentLifecycleCallbacks(val onFragmentAdded: (FragmentData) -> Unit) {
@@ -15,7 +15,6 @@ class CustomFragmentLifecycleCallbacks(val onFragmentAdded: (FragmentData) -> Un
     private val gson = GsonBuilder().setPrettyPrinting().create()
 
     private val fragmentLifecycleCallbacks = object : FragmentManager.FragmentLifecycleCallbacks() {
-
 
         override fun onFragmentViewCreated(
             fm: FragmentManager,

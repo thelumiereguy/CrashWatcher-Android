@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="8dp">
+    android:layout_margin="8dp"
+    android:fitsSystemWindows="true">
 
     <com.google.android.material.card.MaterialCardView xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_margin="8dp"
         app:cardBackgroundColor="?colorSecondary"
         app:cardCornerRadius="12dp"
@@ -26,7 +27,6 @@
             android:textColor="@color/design_default_color_error"
             android:textSize="14sp"
             android:textStyle="bold" />
-
-
+        
     </com.google.android.material.card.MaterialCardView>
-</FrameLayout>
+</ScrollView>

@@ -4,7 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
-import com.thelumierguy.crashwatcher.data.ActivityData
+import com.thelumierguy.crashwatcher.ui.adapters.data.ActivityData
 
 class MainActivity : AppCompatActivity() {
 
