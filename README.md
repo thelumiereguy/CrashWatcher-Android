@@ -48,3 +48,4 @@ dependencies {
 # TODO
 
 * Add more customizability to the tracking
+* Add support for obfuscated files (Obfuscated stacktrace is almost useless)
